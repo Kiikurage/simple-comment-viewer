@@ -30,7 +30,7 @@ export class TwitchCommentPublisher extends CommentPublisher {
         this.cleanUpClient();
     };
 
-    private onMessage = (channel: string, userState: ChatUserstate, message: string, self: boolean) => {
+    private onMessage = (channel: string, userState: ChatUserstate, message: string) => {
         this.dispatch({
             user: userState.username ?? '(unknown)',
             body: message,

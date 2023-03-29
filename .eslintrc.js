@@ -22,7 +22,7 @@ module.exports = {
     },
     overrides: [
         {
-            files: ['**/.eslintrc.js', '**/babel.config.js', '**/webpack.config.js'],
+            files: ['**/.eslintrc.js', '**/babel.config.js', '**/webpack.config.js', 'rollup.config.js', './index.js'],
             env: { node: true },
             rules: {
                 '@typescript-eslint/no-var-requires': 'off',
