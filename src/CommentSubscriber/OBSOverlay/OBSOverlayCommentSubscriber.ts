@@ -1,9 +1,9 @@
 import * as fs from 'fs';
 import * as http from 'http';
 import * as path from 'path';
-import { connection as WebsocketConnection, server as WebsocketServer } from 'websocket';
-import { Comment } from '../../models/Comment';
-import { CommentSubscriber } from '../CommentSubscriber';
+import {connection as WebsocketConnection, server as WebsocketServer} from 'websocket';
+import {Comment} from '../../models/Comment';
+import {CommentSubscriber} from '../CommentSubscriber';
 
 export interface OBSOverlayCommentSubscriberOptions {
     host?: string;
@@ -15,7 +15,8 @@ export class OBSOverlayCommentSubscriber implements CommentSubscriber {
     private websocketServer: WebsocketServer | null = null;
     private readonly websocketConnections: WebsocketConnection[] = [];
 
-    constructor(private readonly options: OBSOverlayCommentSubscriberOptions = {}) {}
+    constructor(private readonly options: OBSOverlayCommentSubscriberOptions = {}) {
+    }
 
     private cleanUpHttpServer() {
         this.httpServer?.close();
@@ -34,7 +35,7 @@ export class OBSOverlayCommentSubscriber implements CommentSubscriber {
 
         this.httpServer = http.createServer((req, res) => {
             res.writeHead(200);
-            res.end(fs.readFileSync(path.join(__dirname, '../../../build/index.html')));
+            res.end(fs.readFileSync(path.join(__dirname, './index.html')));
         });
         this.httpServer.listen(this.options.port ?? 51984, this.options.host ?? 'localhost');
     }

@@ -259,7 +259,7 @@ class OBSOverlayCommentSubscriber {
         this.cleanUpHttpServer();
         this.httpServer = http__namespace.createServer((req, res) => {
             res.writeHead(200);
-            res.end(fs__namespace.readFileSync(path__namespace.join(__dirname, '../../../build/index.html')));
+            res.end(fs__namespace.readFileSync(path__namespace.join(__dirname, './index.html')));
         });
         this.httpServer.listen(this.options.port ?? 51984, this.options.host ?? 'localhost');
     }
