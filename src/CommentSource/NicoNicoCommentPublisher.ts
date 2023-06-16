@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
-import { client as WebsocketClient, Message } from 'websocket';
-import { CommentPublisher } from './CommentPublisher';
+import {client as WebsocketClient, Message} from 'websocket';
+import {CommentPublisher} from './CommentPublisher';
 
 const CHROME_USER_AGENT =
     'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36';
@@ -22,9 +22,8 @@ export class NicoNicoCommentPublisher extends CommentPublisher {
     private async initializeLobbyConnection() {
         this.cleanUpLobbyConnection();
 
-        const { broadcastId, audienceToken, frontendId } = await extractFromHTML(this.options.liveId);
+        const url = await extractFromHTML(this.options.liveId);
 
-        const url = `wss://a.live2.nicovideo.jp/unama/wsapi/v2/watch/${broadcastId}?audience_token=${audienceToken}&frontend_id=${frontendId}`;
         this.lobbyConnectionClient = new WebsocketClient()
             .on('connectFailed', (err) => console.error(err))
             .on('connect', (connection) => {
@@ -33,15 +32,15 @@ export class NicoNicoCommentPublisher extends CommentPublisher {
                     JSON.stringify({
                         type: 'startWatching',
                         data: {
-                            stream: { quality: 'high', protocol: 'hls', latency: 'low', chasePlay: false },
-                            room: { protocol: 'webSocket', commentable: false },
+                            stream: {quality: 'high', protocol: 'hls', latency: 'low', chasePlay: false},
+                            room: {protocol: 'webSocket', commentable: false},
                             reconnect: false,
                         },
                     })
                 );
             });
 
-        this.lobbyConnectionClient.connect(url, undefined, undefined, { 'User-Agent': CHROME_USER_AGENT });
+        this.lobbyConnectionClient.connect(url, undefined, undefined, {'User-Agent': CHROME_USER_AGENT});
     }
 
     private initializeRoomConnection(messageServerUri: string, threadId: string) {
@@ -151,9 +150,5 @@ export async function extractFromHTML(liveId: string) {
     const propsJson = $('#embedded-data').attr('data-props') as string;
     const props = JSON.parse(propsJson);
 
-    return {
-        broadcastId: props.program.broadcastId || props.program.reliveProgramId,
-        audienceToken: props.player.audienceToken,
-        frontendId: props.site.frontendId,
-    };
+    return props.site.relive.webSocketUrl as string
 }

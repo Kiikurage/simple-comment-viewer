@@ -9,7 +9,7 @@ const {
 new CommentHub()
     .addPublisher(
         new NicoNicoCommentPublisher({
-            liveId: 'lv340782058',
+            liveId: process.env.NICO_LIVE_ID,
         })
     )
     .addPublisher(

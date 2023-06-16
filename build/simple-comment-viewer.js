@@ -120,8 +120,7 @@ class NicoNicoCommentPublisher extends CommentPublisher {
     }
     async initializeLobbyConnection() {
         this.cleanUpLobbyConnection();
-        const { broadcastId, audienceToken, frontendId } = await extractFromHTML(this.options.liveId);
-        const url = `wss://a.live2.nicovideo.jp/unama/wsapi/v2/watch/${broadcastId}?audience_token=${audienceToken}&frontend_id=${frontendId}`;
+        const url = await extractFromHTML(this.options.liveId);
         this.lobbyConnectionClient = new websocket.client()
             .on('connectFailed', (err) => console.error(err))
             .on('connect', (connection) => {
@@ -180,11 +179,7 @@ async function extractFromHTML(liveId) {
     const $ = cheerio__namespace.load(res.data);
     const propsJson = $('#embedded-data').attr('data-props');
     const props = JSON.parse(propsJson);
-    return {
-        broadcastId: props.program.broadcastId || props.program.reliveProgramId,
-        audienceToken: props.player.audienceToken,
-        frontendId: props.site.frontendId,
-    };
+    return props.site.relive.webSocketUrl;
 }
 
 class TwitchCommentPublisher extends CommentPublisher {
