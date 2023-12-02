@@ -16,13 +16,13 @@ export const CommentListView = () => {
         return () => ws.removeEventListener('message', callback);
     }, [onMessage]);
 
-    const latestComments = activeComments.slice(-20);
+    const latestComments = activeComments.slice(-3);
 
     return (
         <div
             style={{
                 position: 'fixed',
-                bottom: 200,
+                bottom: 32,
                 left: 32,
                 right: 32,
                 padding: latestComments.length === 0 ? 0 : '16px 32px',
@@ -36,13 +36,13 @@ export const CommentListView = () => {
             }}
         >
             {latestComments.map((comment) => (
-                <CommentView key={`${comment.timestamp}:${comment.user}`} comment={comment} />
+                <CommentView key={`${comment.timestamp}:${comment.username}`} comment={comment}/>
             ))}
         </div>
     );
 };
 
-const CommentView = ({ comment }: { comment: Comment }) => {
+const CommentView = ({comment}: { comment: Comment }) => {
     return (
         <div
             style={{
@@ -55,21 +55,31 @@ const CommentView = ({ comment }: { comment: Comment }) => {
                             rgb(0, 0, 0) 1px -1px 0,
                             rgb(0, 0, 0) -1px 1px 0,
                             rgb(0, 0, 0) 1px 1px 0`,
-                lineHeight: 1.2,
+                lineHeight: '24px',
             }}
-            key={`${comment.timestamp}:${comment.user}`}
+            key={`${comment.timestamp}:${comment.username}`}
         >
+            <img style={{
+                width: '24px',
+                height: '24px',
+                borderRadius: '50% 50%',
+                marginRight: 8,
+                verticalAlign: 'middle'
+            }}
+                 src={comment.iconUrl}/>
             <span
                 style={{
-                    color: '#080',
+                    color: '#056dff',
                     marginRight: 8,
+                    verticalAlign: 'middle'
                 }}
             >
-                {comment.user}
+                {comment.username}
             </span>
             <span
                 style={{
                     color: '#fff',
+                    verticalAlign: 'middle',
                 }}
             >
                 {comment.body}

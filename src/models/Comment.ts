@@ -1,5 +1,6 @@
 export interface Comment {
-    user: string;
+    username: string;
+    iconUrl: string;
     body: string;
     timestamp: number;
     platform: string;

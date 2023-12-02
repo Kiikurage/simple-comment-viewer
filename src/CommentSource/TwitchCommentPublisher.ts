@@ -32,10 +32,11 @@ export class TwitchCommentPublisher extends CommentPublisher {
 
     private onMessage = (channel: string, userState: ChatUserstate, message: string) => {
         this.dispatch({
-            user: userState.username ?? '(unknown)',
+            username: userState.username ?? '(unknown)',
             body: message,
             timestamp: Date.now(),
             platform: 'twitch',
+            iconUrl: 'https://secure-dcdn.cdn.nimg.jp/nicoaccount/usericon/defaults/blank.jpg'
         });
     };
 }

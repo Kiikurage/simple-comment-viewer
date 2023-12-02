@@ -13,7 +13,8 @@ export class MockCommentPublisher extends CommentPublisher {
                 body: 'Mock comment',
                 platform: 'mock',
                 timestamp: Date.now(),
-                user: 'Dummy User',
+                username: 'Dummy User',
+                iconUrl: 'https://secure-dcdn.cdn.nimg.jp/nicoaccount/usericon/defaults/blank.jpg'
             });
         }, 5000);
     };

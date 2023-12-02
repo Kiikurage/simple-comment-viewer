@@ -105,11 +105,16 @@ class NicoNicoCommentPublisher extends CommentPublisher {
                 this.onRoomMessage(nicoNamaMessage);
         };
         this.onChatMessage = (chatMessage) => {
+            const userId = chatMessage.chat.user_id;
+            const isAnonymous = !userId.match(/^\d+$/);
             this.dispatch({
                 platform: 'niconico',
                 body: chatMessage.chat.content,
                 timestamp: Date.now(),
-                user: chatMessage.chat.name ?? chatMessage.chat.user_id.slice(0, 8),
+                username: chatMessage.chat.name ?? userId.slice(0, 8),
+                iconUrl: isAnonymous ?
+                    'https://secure-dcdn.cdn.nimg.jp/nicoaccount/usericon/defaults/blank.jpg' :
+                    `https://secure-dcdn.cdn.nimg.jp/nicoaccount/usericon/${Math.floor(+userId / 10000)}/${userId}.jpg`
             });
         };
         this.onRoomMessage = (roomMessage) => {
@@ -198,10 +203,11 @@ class TwitchCommentPublisher extends CommentPublisher {
         };
         this.onMessage = (channel, userState, message) => {
             this.dispatch({
-                user: userState.username ?? '(unknown)',
+                username: userState.username ?? '(unknown)',
                 body: message,
                 timestamp: Date.now(),
                 platform: 'twitch',
+                iconUrl: 'https://secure-dcdn.cdn.nimg.jp/nicoaccount/usericon/defaults/blank.jpg'
             });
         };
     }
@@ -217,7 +223,7 @@ class CLICommentSubscriber {
             const date = new Date(comment.timestamp);
             const time = chalk.dim(`${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`);
             const platform = chalk.dim(`[${comment.platform.slice(0, 4)}]`);
-            const user = chalk.dim.green(`@${comment.user}`);
+            const user = chalk.dim.green(`@${comment.username}`);
             const body = comment.body;
             console.log(`${platform} ${time} ${user} ${body}`);
         };

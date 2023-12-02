@@ -106,11 +106,17 @@ export class NicoNicoCommentPublisher extends CommentPublisher {
     };
 
     private onChatMessage = (chatMessage: ChatMessage) => {
+        const userId = chatMessage.chat.user_id;
+        const isAnonymous = !userId.match(/^\d+$/);
+
         this.dispatch({
             platform: 'niconico',
             body: chatMessage.chat.content,
             timestamp: Date.now(),
-            user: chatMessage.chat.name ?? chatMessage.chat.user_id.slice(0, 8),
+            username: chatMessage.chat.name ?? userId.slice(0, 8),
+            iconUrl: isAnonymous ?
+                'https://secure-dcdn.cdn.nimg.jp/nicoaccount/usericon/defaults/blank.jpg' :
+                `https://secure-dcdn.cdn.nimg.jp/nicoaccount/usericon/${Math.floor(+userId / 10000)}/${userId}.jpg`
         });
     };
 

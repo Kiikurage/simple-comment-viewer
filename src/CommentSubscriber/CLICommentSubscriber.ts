@@ -9,7 +9,7 @@ export class CLICommentSubscriber implements CommentSubscriber {
             `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
         );
         const platform = chalk.dim(`[${comment.platform.slice(0, 4)}]`);
-        const user = chalk.dim.green(`@${comment.user}`);
+        const user = chalk.dim.green(`@${comment.username}`);
         const body = comment.body;
         console.log(`${platform} ${time} ${user} ${body}`);
     };
